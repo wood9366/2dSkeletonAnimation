@@ -1,6 +1,5 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import (QImage, QPen, QColor, QBrush)
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 
 class AnimationGraphicsScene(QGraphicsScene):
     def __init__(self, parent=None):
