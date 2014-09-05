@@ -6,7 +6,7 @@ class AnimationGraphicsScene(QGraphicsScene):
         super(QGraphicsScene, self).__init__(parent)
 
     def initUI(self, x, y, w, h):
-        self.setBackgroundBrush(QBrush(QColor(0, 0, 0), Qt.Dense7Pattern));
+        self.setBackgroundBrush(QBrush(QColor(128, 128, 128), Qt.SolidPattern));
 
         self.setSceneRect(x, y, w, h)
 
@@ -14,7 +14,6 @@ class AnimationGraphicsScene(QGraphicsScene):
 
         self.addLine(rect.left(), 0, rect.right(), 0, QPen(QColor(0, 0, 0)));
         self.addLine(0, rect.top(), 0, rect.bottom(), QPen(QColor(0, 0, 0)));
-
 
 class AnimationGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
