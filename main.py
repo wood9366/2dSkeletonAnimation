@@ -1,23 +1,20 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-
-class AnimationGraphicsScene(QGraphicsScene):
-    def __init__(self, parent=None):
-        super(QGraphicsScene, self).__init__(parent)
-
-    def initUI(self, x, y, w, h):
-        self.setBackgroundBrush(QBrush(QColor(128, 128, 128), Qt.SolidPattern));
-
-        self.setSceneRect(x, y, w, h)
-
-        rect = self.sceneRect()
-
-        self.addLine(rect.left(), 0, rect.right(), 0, QPen(QColor(0, 0, 0)));
-        self.addLine(0, rect.top(), 0, rect.bottom(), QPen(QColor(0, 0, 0)));
+from lib.ui.bone import *
+from lib.ui.animation_scene import AnimationGraphicsScene
 
 class AnimationGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super(QGraphicsView, self).__init__(scene, parent)
+
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.TextAntialiasing)
+
+    def wheelEvent(self, event):
+        factor = 1.41 ** (event.delta() / 240.0)
+        self.scale(factor, factor)
+        event.accept()
 
 class MainForm(QWidget):
     def __init__(self, parent=None):
@@ -31,7 +28,6 @@ class MainForm(QWidget):
         view = AnimationGraphicsView(scene)
         view.setCacheMode(QGraphicsView.CacheBackground)
         view.setViewportUpdateMode(QGraphicsView.BoundingRectViewportUpdate)
-        view.setDragMode(QGraphicsView.ScrollHandDrag)
         view.setWindowTitle("Skeleton View")
 
         mainLayout = QVBoxLayout()
