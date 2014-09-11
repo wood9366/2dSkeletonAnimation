@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from ..data.bone import Bone
+import math
 
 class GraphicItemBone(QGraphicsItem):
     """Bone graphic item"""
@@ -18,6 +19,9 @@ class GraphicItemBone(QGraphicsItem):
         self.__isShowAxis = True
 
         self.__data = Bone()
+
+        self.__v1 = QPointF(0, 0)
+        self.__v2 = QPointF(0, 0)
     
     def shape(self):
         path = QPainterPath()
@@ -29,6 +33,35 @@ class GraphicItemBone(QGraphicsItem):
         region += QRegion(QRect(QPoint(0, 0), QPoint(self.__axisLen, self.__axisLen)))
         region += QRegion(self.__polygon)
         return QRectF(region.boundingRect())
+
+    def mousePressEvent(self, event):
+        from animation_scene import AnimationGraphicsScene
+        mode = self.scene().adjustMode
+
+        if mode == AnimationGraphicsScene.Rotate:
+            self.__rotateBaseAngle = self.rotation()
+
+    def mouseMoveEvent(self, event):
+        from animation_scene import AnimationGraphicsScene
+        mode = self.scene().adjustMode
+
+        if mode == AnimationGraphicsScene.Move:
+            if self.isSelected:
+                self.setPos(self.mapToParent(event.pos()))
+                event.accept()
+        elif mode == AnimationGraphicsScene.Rotate:
+            if self.isSelected:
+                v1 = QVector2D(event.buttonDownScenePos(Qt.LeftButton) - self.scenePos())
+                v2 = QVector2D(event.scenePos() - self.scenePos())
+                dot = QVector2D.dotProduct(v1, v2)
+                cos = dot / (v1.length() * v2.length())
+                angle = math.degrees(math.acos(cos))
+                z = v1.x() * v2.y() - v1.y() * v2.x()
+                angle = angle if z > 0 else -angle
+                self.setRotation(self.__rotateBaseAngle + angle)
+                event.accept()
+        else:
+            super(GraphicItemBone, self).mouseMoveEvent(event)
 
     def paint(self, painter, option, widget = None):
         # draw bone polygon

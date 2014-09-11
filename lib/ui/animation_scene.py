@@ -1,6 +1,7 @@
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QGraphicsScene, QBrush, QPen, QColor
+from PyQt4.QtGui import QGraphicsScene, QBrush, QPen, QColor, QVector2D
 from bone import GraphicItemBone
+import math
 
 class AnimationGraphicsScene(QGraphicsScene):
     Select, Move, Rotate = range(3)
@@ -10,16 +11,21 @@ class AnimationGraphicsScene(QGraphicsScene):
         self.__bones = []
         self.__adjustMode = self.Select
 
+    @property
+    def adjustMode(self):
+        return self.__adjustMode
+
     def initUI(self, x, y, w, h):
         self.setBackgroundBrush(QBrush(QColor(128, 128, 128), Qt.SolidPattern))
-
         self.setSceneRect(x, y, w, h)
 
+        # coordinate
         rect = self.sceneRect()
 
         self.addLine(rect.left(), 0, rect.right(), 0, QPen(QColor(0, 0, 0)))
         self.addLine(0, rect.top(), 0, rect.bottom(), QPen(QColor(0, 0, 0)))
 
+        # bones
         bone1 = self.__createBone(None)
         bone2 = self.__createBone(bone1)
 
@@ -37,26 +43,3 @@ class AnimationGraphicsScene(QGraphicsScene):
             self.__adjustMode = self.Select
 
         print "mode: %d" % (self.__adjustMode)
-
-    def mouseMoveEvent(self, event):
-        selectedItems = self.selectedItems()
-        offset = event.scenePos() - event.lastScenePos()
-
-        # print "offset: %f, %f" % (offset.x(), offset.y())
-
-        if self.__adjustMode == self.Move:
-            for item in selectedItems:
-                item.translate(offset.x(), offset.y())
-                # m = item.matrix()
-                # m *= QMatrix().translate(offset.x(), offset.y())
-                # item.setMatrix(m)
-            event.accept()
-        elif self.__adjustMode == self.Rotate:
-            for item in selectedItems:
-                item.rotate(offset.x())
-                # m = item.matrix()
-                # m *= QMatrix().rotate(offset.x())
-                # item.setMatrix(m)
-            event.accept()
-        else:
-            super(AnimationGraphicsScene, self).mouseMoveEvent(event)
