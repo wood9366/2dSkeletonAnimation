@@ -19,9 +19,6 @@ class GraphicItemBone(QGraphicsItem):
         self.__isShowAxis = True
 
         self.__data = Bone()
-
-        self.__v1 = QPointF(0, 0)
-        self.__v2 = QPointF(0, 0)
     
     def shape(self):
         path = QPainterPath()

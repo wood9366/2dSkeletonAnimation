@@ -25,10 +25,6 @@ class AnimationGraphicsScene(QGraphicsScene):
         self.addLine(rect.left(), 0, rect.right(), 0, QPen(QColor(0, 0, 0)))
         self.addLine(0, rect.top(), 0, rect.bottom(), QPen(QColor(0, 0, 0)))
 
-        # bones
-        bone1 = self.__createBone(None)
-        bone2 = self.__createBone(bone1)
-
     def __createBone(self, parent):
         bone = GraphicItemBone(parent, self)
         self.__bones.append(bone)
@@ -43,3 +39,10 @@ class AnimationGraphicsScene(QGraphicsScene):
             self.__adjustMode = self.Select
 
         print "mode: %d" % (self.__adjustMode)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.RightButton:
+            bone = self.__createBone(None)
+            bone.setPos(bone.mapToParent(bone.mapFromScene(event.scenePos())))
+        else:
+            super(AnimationGraphicsScene, self).mousePressEvent(event)
