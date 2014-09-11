@@ -4,12 +4,14 @@ from bone import GraphicItemBone
 import math
 
 class AnimationGraphicsScene(QGraphicsScene):
-    Select, Move, Rotate = range(3)
+    Select, Move, Rotate, Link = range(4)
 
     def __init__(self, parent = None):
         super(QGraphicsScene, self).__init__(parent)
         self.__bones = []
         self.__adjustMode = self.Select
+
+        self.__linkFrom = None
 
     @property
     def adjustMode(self):
@@ -35,6 +37,9 @@ class AnimationGraphicsScene(QGraphicsScene):
             self.__adjustMode = self.Rotate
         elif event.key() == Qt.Key_W:
             self.__adjustMode = self.Move
+        elif event.key() == Qt.Key_L:
+            self.__adjustMode = self.Link
+            self.__linkFrom = self.__linkTo = None
         else:
             self.__adjustMode = self.Select
 
@@ -42,7 +47,23 @@ class AnimationGraphicsScene(QGraphicsScene):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
-            bone = self.__createBone(None)
-            bone.setPos(bone.mapToParent(bone.mapFromScene(event.scenePos())))
+            if self.__adjustMode == self.Select:
+                bone = self.__createBone(None)
+                bone.setPos(bone.mapToParent(bone.mapFromScene(event.scenePos())))
+            else:
+                self.__adjustMode = self.Select
+        elif event.button() == Qt.LeftButton:
+            if self.__adjustMode == self.Link:
+                item = self.itemAt(event.scenePos())
+                if self.__linkFrom is None:
+                    if item is not None:
+                        self.__linkFrom = item
+                else:
+                    pos = self.__linkFrom.scenePos()
+                    self.__linkFrom.setParentItem(item)
+                    if item is not None: self.__linkFrom.setPos(item.mapFromScene(pos))
+                    self.__adjustMode = self.Select
+            else:
+                super(AnimationGraphicsScene, self).mousePressEvent(event)
         else:
             super(AnimationGraphicsScene, self).mousePressEvent(event)

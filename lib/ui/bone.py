@@ -12,9 +12,6 @@ class GraphicItemBone(QGraphicsItem):
         self.__polygon = QPolygon([QPoint(-1, 0), QPoint(1, 0), QPoint(0, 3)])
         self.__axisLen = 5
 
-        self.setFlag(QGraphicsItem.ItemIsSelectable)
-        self.setFlag(QGraphicsItem.ItemIsFocusable)
-
         self.__isShowBoundingRect = False
         self.__isShowAxis = True
 
@@ -29,6 +26,13 @@ class GraphicItemBone(QGraphicsItem):
         region = QRegion()
         region += QRegion(QRect(QPoint(0, 0), QPoint(self.__axisLen, self.__axisLen)))
         region += QRegion(self.__polygon)
+
+        parent = self.parentItem()
+        if parent is not None:
+            p1 = self.mapFromParent(self.pos())
+            p2 = self.mapFromScene(parent.scenePos())
+            region += QRegion(QRect(p1.x(), p1.y(), p2.x() - p1.x(), p2.y() - p1.y()).normalized().adjusted(-1, -1, 1, 1))
+
         return QRectF(region.boundingRect())
 
     def mousePressEvent(self, event):
@@ -59,12 +63,21 @@ class GraphicItemBone(QGraphicsItem):
                 event.accept()
         else:
             super(GraphicItemBone, self).mouseMoveEvent(event)
+    
+    def __str__(self):
+        return "Bone Item %d" % (self.__data.id)
 
     def paint(self, painter, option, widget = None):
         # draw bone polygon
         painter.setPen(QPen(QColor(0, 255, 0)))
         painter.setBrush(QBrush(QColor(0, 128, 0, 128)))
         painter.drawPolygon(self.__polygon)
+
+        parent = self.parentItem()
+
+        if parent is not None:
+            painter.setPen(QColor(0, 0, 255, 128))
+            painter.drawLine(self.mapFromParent(self.pos()), self.mapFromScene(parent.scenePos()))
 
         # draw local coordinate
         if self.__isShowAxis:
