@@ -16,28 +16,39 @@ class AnimationGraphicsView(QGraphicsView):
         self.scale(factor, factor)
         event.accept()
 
-class MainForm(QWidget):
-    def __init__(self, parent=None):
-        super(QWidget, self).__init__(parent)
+class MainForm(QMainWindow):
+    def __init__(self):
+        super(MainForm, self).__init__()
 
-        quitButton = QPushButton("Quit")
+        self.__initActions()
+        self.__initMenus()
 
-        scene = AnimationGraphicsScene()
-        scene.initUI(-300, -300, 600, 600)
+        self.__scene = AnimationGraphicsScene()
+        self.__scene.initUI(-500, -500, 1000, 1000)
 
-        view = AnimationGraphicsView(scene)
-        view.setCacheMode(QGraphicsView.CacheBackground)
-        view.setViewportUpdateMode(QGraphicsView.BoundingRectViewportUpdate)
-        view.setWindowTitle("Skeleton View")
+        self.__view = AnimationGraphicsView(self.__scene)
+        self.__view.setCacheMode(QGraphicsView.CacheBackground)
+        self.__view.setViewportUpdateMode(QGraphicsView.BoundingRectViewportUpdate)
+        self.__view.setWindowTitle("Skeleton View")
 
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.__view)
 
-        mainLayout.addWidget(view)
-        mainLayout.addWidget(quitButton)
-
-        self.setLayout(mainLayout)
+        self.__widget = QWidget()
+        self.__widget.setLayout(mainLayout)
+        self.setCentralWidget(self.__widget)
         self.setWindowTitle("2d Skeleton Animation")
-        self.resize(300, 300)
+        self.resize(500, 500)
+        
+    def __initActions(self):
+        self.__actionAbout = QAction("&About", self, triggered = self.__about)
+
+    def __about(self):
+        QMessageBox.about(self, "About 2d skeleton animation", "<b>2D</b> Skeleton Animation")
+
+    def __initMenus(self):
+        self.__menuHelp = self.menuBar().addMenu("&Help")
+        self.__menuHelp.addAction(self.__actionAbout)
 
 if __name__ == '__main__':
 	import sys
