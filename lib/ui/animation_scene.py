@@ -17,6 +17,10 @@ class AnimationGraphicsScene(QGraphicsScene):
     def adjustMode(self):
         return self.__adjustMode
 
+    @adjustMode.setter
+    def adjustMode(self, mode):
+        self.__adjustMode = mode
+
     def initUI(self, x, y, w, h):
         self.setBackgroundBrush(QBrush(QColor(128, 128, 128), Qt.SolidPattern))
         self.setSceneRect(x, y, w, h)
@@ -34,26 +38,26 @@ class AnimationGraphicsScene(QGraphicsScene):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_E:
-            self.__adjustMode = self.Rotate
+            self.adjustMode = self.Rotate
         elif event.key() == Qt.Key_W:
-            self.__adjustMode = self.Move
+            self.adjustMode = self.Move
         elif event.key() == Qt.Key_L:
-            self.__adjustMode = self.Link
+            self.adjustMode = self.Link
             self.__linkFrom = self.__linkTo = None
         else:
-            self.__adjustMode = self.Select
+            self.adjustMode = self.Select
 
         print "mode: %d" % (self.__adjustMode)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
-            if self.__adjustMode == self.Select:
+            if self.adjustMode == self.Select:
                 bone = self.__createBone(None)
                 bone.setPos(bone.mapToParent(bone.mapFromScene(event.scenePos())))
             else:
                 self.__adjustMode = self.Select
         elif event.button() == Qt.LeftButton:
-            if self.__adjustMode == self.Link:
+            if self.adjustMode == self.Link:
                 item = self.itemAt(event.scenePos())
                 if self.__linkFrom is None:
                     if item is not None:
@@ -62,7 +66,7 @@ class AnimationGraphicsScene(QGraphicsScene):
                     pos = self.__linkFrom.scenePos()
                     self.__linkFrom.setParentItem(item)
                     if item is not None: self.__linkFrom.setPos(item.mapFromScene(pos))
-                    self.__adjustMode = self.Select
+                    self.adjustMode = self.Select
             else:
                 super(AnimationGraphicsScene, self).mousePressEvent(event)
         else:
