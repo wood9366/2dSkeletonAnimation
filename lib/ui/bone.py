@@ -15,6 +15,8 @@ class GraphicItemBone(QGraphicsItem):
         self.__isShowBoundingRect = False
         self.__isShowAxis = True
 
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+
         self.__data = Bone()
     
     def shape(self):
@@ -47,11 +49,11 @@ class GraphicItemBone(QGraphicsItem):
         mode = self.scene().adjustMode
 
         if mode == AnimationGraphicsScene.Move:
-            if self.isSelected:
+            if self.isSelected():
                 self.setPos(self.mapToParent(event.pos()))
                 event.accept()
         elif mode == AnimationGraphicsScene.Rotate:
-            if self.isSelected:
+            if self.isSelected():
                 v1 = QVector2D(event.buttonDownScenePos(Qt.LeftButton) - self.scenePos())
                 v2 = QVector2D(event.scenePos() - self.scenePos())
                 dot = QVector2D.dotProduct(v1, v2)
@@ -80,7 +82,7 @@ class GraphicItemBone(QGraphicsItem):
             painter.drawLine(self.mapFromParent(self.pos()), self.mapFromScene(parent.scenePos()))
 
         # draw local coordinate
-        if self.__isShowAxis:
+        if self.isSelected() and self.__isShowAxis:
             painter.setPen(QColor(0, 255, 0))
             painter.drawLine(0, 0, self.__axisLen, 0)
             painter.setPen(QColor(255, 0, 0))
