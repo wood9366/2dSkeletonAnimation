@@ -20,11 +20,12 @@ class MainForm(QMainWindow):
     def __init__(self):
         super(MainForm, self).__init__()
 
-        self.__initActions()
-        self.__initMenus()
-
         self.__scene = AnimationGraphicsScene()
         self.__scene.initUI(-500, -500, 1000, 1000)
+
+        self.__initActions()
+        self.__initMenus()
+        self.__initToolBar()
 
         self.__view = AnimationGraphicsView(self.__scene)
         self.__view.setCacheMode(QGraphicsView.CacheBackground)
@@ -49,6 +50,11 @@ class MainForm(QMainWindow):
     def __initMenus(self):
         self.__menuHelp = self.menuBar().addMenu("&Help")
         self.__menuHelp.addAction(self.__actionAbout)
+
+    def __initToolBar(self):
+        self.__toolBarScene = self.addToolBar("Scene Tool")
+        for action in self.__scene.actions():
+            self.__toolBarScene.addAction(action)
 
 if __name__ == '__main__':
 	import sys
