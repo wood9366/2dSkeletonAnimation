@@ -1,5 +1,5 @@
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QGraphicsScene, QBrush, QPen, QColor, QVector2D, QAction, QActionGroup
+from PyQt4.QtGui import QGraphicsScene, QBrush, QPen, QColor, QVector2D, QAction, QActionGroup, QPixmap
 from bone import GraphicItemBone
 import math
 
@@ -8,6 +8,7 @@ class AnimationGraphicsScene(QGraphicsScene):
 
     def __init__(self, parent = None):
         super(QGraphicsScene, self).__init__(parent)
+
         self.__bones = []
         self.__adjustMode = self.Select
 
@@ -46,7 +47,6 @@ class AnimationGraphicsScene(QGraphicsScene):
             self.__actions[self.adjustMode].setChecked(True)
 
     def initUI(self, x, y, w, h):
-        self.setBackgroundBrush(QBrush(QColor(128, 128, 128), Qt.SolidPattern))
         self.setSceneRect(x, y, w, h)
 
         # coordinate

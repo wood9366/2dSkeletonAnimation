@@ -2,6 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from lib.ui.bone import *
 from lib.ui.animation_scene import AnimationGraphicsScene
+import main_rc2
 
 class AnimationGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
@@ -22,6 +23,8 @@ class MainForm(QMainWindow):
 
         self.__scene = AnimationGraphicsScene()
         self.__scene.initUI(-500, -500, 1000, 1000)
+
+        self.__scene.setBackgroundBrush(QBrush(QPixmap(':/res/cross.png')))
 
         self.__initActions()
         self.__initMenus()
