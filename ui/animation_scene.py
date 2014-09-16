@@ -1,6 +1,6 @@
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QGraphicsScene, QBrush, QPen, QColor, QVector2D, QAction, QActionGroup, QPixmap
-from bone import GraphicItemBone
+from ui.bone import GraphicItemBone
 import math
 
 class AnimationGraphicsScene(QGraphicsScene):

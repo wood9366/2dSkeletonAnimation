@@ -1,4 +1,4 @@
-from ..util import uid
+from util import uid
 
 class Bone(object):
     """Bone data"""

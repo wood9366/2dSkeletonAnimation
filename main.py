@@ -1,7 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from lib.ui.bone import *
-from lib.ui.animation_scene import AnimationGraphicsScene
+from ui.bone import *
+from ui.animation_scene import AnimationGraphicsScene
 import main_rc2
 
 class AnimationGraphicsView(QGraphicsView):

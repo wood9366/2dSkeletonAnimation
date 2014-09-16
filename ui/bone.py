@@ -1,6 +1,6 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from ..data.bone import Bone
+from data.bone import Bone
 import math
 
 class GraphicItemBone(QGraphicsItem):

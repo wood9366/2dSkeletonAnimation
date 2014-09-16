@@ -1,5 +1,5 @@
 import sys
-from ..util import uid
+from util import uid
 
 class Skeleton(object):
     """skeleton data"""
