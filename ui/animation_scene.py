@@ -9,6 +9,8 @@ class AnimationGraphicsScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(QGraphicsScene, self).__init__(parent)
 
+        self.__project = None
+
         self.__bones = []
         self.__adjustMode = self.Select
 
@@ -28,6 +30,9 @@ class AnimationGraphicsScene(QGraphicsScene):
         self.__actionGroupMode.triggered[QAction].connect(self.__changeSceneMode)
 
         self.__actionModeSelect.setChecked(True)
+
+    def laod(self, project):
+        self.__project = project
 
     def actions(self):
         return self.__actions

@@ -1,6 +1,6 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from data.bone import Bone
+import data.bone
 import math
 
 class GraphicItemBone(QGraphicsItem):
@@ -17,7 +17,7 @@ class GraphicItemBone(QGraphicsItem):
 
         self.setFlag(QGraphicsItem.ItemIsSelectable)
 
-        self.__data = Bone()
+        self.__data = data.bone.Bone()
     
     def shape(self):
         path = QPainterPath()

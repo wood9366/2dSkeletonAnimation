@@ -2,6 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from ui.bone import *
 from ui.animation_scene import AnimationGraphicsScene
+import data.project    
 import main_rc2
 
 class AnimationGraphicsView(QGraphicsView):
@@ -20,6 +21,8 @@ class AnimationGraphicsView(QGraphicsView):
 class MainForm(QMainWindow):
     def __init__(self):
         super(MainForm, self).__init__()
+
+        self.__project = None
 
         self.__scene = AnimationGraphicsScene()
         self.__scene.initUI(-500, -500, 1000, 1000)
@@ -43,6 +46,8 @@ class MainForm(QMainWindow):
         self.setCentralWidget(self.__widget)
         self.setWindowTitle("2d Skeleton Animation")
         self.resize(500, 500)
+
+        self.__newProject()
         
     def __initActions(self):
         self.__actionAbout = QAction("&About", self, triggered = self.__about)
@@ -58,6 +63,28 @@ class MainForm(QMainWindow):
         self.__toolBarScene = self.addToolBar("Scene Tool")
         for action in self.__scene.actions():
             self.__toolBarScene.addAction(action)
+
+    def __newProject(self):
+        self.__project = data.project.Project()
+        self.__initProject()
+
+    def __saveProject(self):
+        # todo, save proejct into file
+        pass
+
+    def __loadProject(self, projectFile):
+        # todo, load project data from file
+        self.__initProject()
+        pass
+
+    def __initProject(self):
+        self.setWindowTitle(self.__project.name)
+        self.__initScene()
+        # todo, init bone tree
+
+    def __initScene(self):
+        # init bones graphics item
+        pass
 
 if __name__ == '__main__':
 	import sys

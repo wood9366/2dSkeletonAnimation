@@ -1,10 +1,20 @@
 from util import uid
+from PyQt4 import QtGui, QtCore
 
 class Bone(object):
     """Bone data"""
 
     def __init__(self):
         self.__id = uid.generateUID()
+
+        self.__name = "bone" + self.__id
+        self.__pos = QtCore.QPointF(0, 0)
+        self.__scale = QtCore.QPointF(1, 1)
+        self.__length = 0
+        self.__angle = 0
+
+        self.__nodes = []
+
         self.__parent = None
         self.__children = []
 
